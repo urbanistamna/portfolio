@@ -102,9 +102,15 @@ header{display:flex; justify-content:space-between; align-items:center; padding:
 }
 .role-marquee-track span{
   height:30px; display:flex; align-items:center; justify-content:flex-start;
-  font-family:'Big Shoulders Display', sans-serif; font-weight:800;
+  font-family:'Big Shoulders Display', Impact, sans-serif; font-weight:800;
+  font-synthesis:weight; -webkit-font-smoothing:antialiased;
   font-size:clamp(13px,1.6vw,20px); letter-spacing:0.04em;
   text-transform:none; color:var(--charcoal); white-space:nowrap;
+}
+@media (max-width:640px){
+  .role-marquee{margin-top:-6px; margin-left:2px;}
+  .role-marquee-viewport{height:22px;}
+  .role-marquee-track span{height:22px; font-size:14px; letter-spacing:0.02em;}
 }
 @keyframes roleCycle{
   0%,27%{transform:translateY(0%);}
@@ -326,7 +332,7 @@ svg#scene{width:100%; height:auto; display:block;}
   text-decoration:none;
   opacity:0; transform:translateY(-16px) scale(0.5);
   pointer-events:none;
-  transition:opacity 0.28s ease, transform 0.28s cubic-bezier(.34,1.56,.64,1), background 0.2s ease;
+  transition:opacity 0.28s ease, transform 0.28s cubic-bezier(.34,1.56,.64,1), background 0.2s ease, color 0.2s ease;
 }
 .social-drop-item svg{width:15px; height:15px;}
 .social-drop.open .social-drop-item{
@@ -337,7 +343,12 @@ svg#scene{width:100%; height:auto; display:block;}
 .social-drop.open .social-drop-item:nth-child(3){transition-delay:0.12s;}
 .social-drop.open .social-drop-item:nth-child(4){transition-delay:0.17s;}
 .social-drop.open .social-drop-item:nth-child(5){transition-delay:0.22s;}
-.social-drop-item:hover{background:var(--terracotta); transform:translateY(0) scale(1.12) !important;}
+.social-drop-item:hover{transform:translateY(0) scale(1.12) !important;}
+.social-drop-item:nth-child(1):hover{background:var(--blush); color:var(--charcoal);}
+.social-drop-item:nth-child(2):hover{background:var(--teal); color:var(--paper);}
+.social-drop-item:nth-child(3):hover{background:var(--sandstone); color:var(--charcoal);}
+.social-drop-item:nth-child(4):hover{background:var(--terracotta); color:var(--paper);}
+.social-drop-item:nth-child(5):hover{background:var(--sage); color:var(--charcoal);}
 @media (prefers-reduced-motion: reduce){
   .menu-btn .bar, .social-drop-item{transition:none;}
 }
@@ -390,7 +401,11 @@ svg#scene{width:100%; height:auto; display:block;}
 @media (max-width:640px){
   .intro-split{flex-direction:column;}
   .intro-photo-wrap{width:100% !important; height:auto !important; aspect-ratio:4/5.6;}
-  .intro-tabs-col{padding:36px 28px 44px;}
+  .intro-tabs-col{padding:36px 20px 44px;}
+  .index-block{width:100%; max-width:none; padding:20px 20px; transform:rotate(0deg);}
+  .index-list a:nth-child(even){transform:rotate(0deg);}
+  .index-block:hover{transform:translateY(-4px);}
+  .index-title{font-size:20px;}
 }
 .index-block{
   position:relative; display:flex; align-items:center;
@@ -583,7 +598,7 @@ button,
   display:flex; flex-direction:column; gap:2px;
   background:linear-gradient(to top, rgba(43,43,43,0.78), rgba(43,43,43,0));
 }
-.reflection-card--image-front .reflection-card-face--front .reflection-card-date{color:var(--asphalt);}
+.reflection-card--image-front .reflection-card-face--front .reflection-card-date{color:var(--asphalt); font-size:9px;}
 .reflection-card--image-front .reflection-card-face--front .reflection-card-title{color:var(--paper);}
 
 /* whichever face holds the writing gets an actual frosted-glass treatment: a blurred
@@ -629,11 +644,12 @@ button,
 
 .reflection-card-date{
   font-family:'Special Elite','Inter',monospace; font-size:10px; letter-spacing:0.06em;
-  text-transform:uppercase; color:var(--text-secondary);
+  font-weight:700; text-transform:uppercase; color:var(--text-secondary);
 }
 .reflection-card-title{
-  font-family:'Big Shoulders Display',sans-serif; font-weight:800; font-size:16px;
-  line-height:1.15; color:var(--charcoal); letter-spacing:-0.005em;
+  font-family:'Special Elite','Inter',monospace; font-weight:700; font-size:12.5px;
+  line-height:1.2; color:var(--charcoal); letter-spacing:0.01em;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 .reflection-card-face--text .reflection-card-title{color:var(--paper);}
 .reflection-card-text{
@@ -649,7 +665,7 @@ button,
 }
 @media (max-width:560px){
   .reflections-grid{grid-template-columns:repeat(2, 1fr); gap:12px;}
-  .reflection-card-title{font-size:14px;}
+  .reflection-card-title{font-size:11px;}
   .reflection-card-text{font-size:11.5px;}
 }
 @media (prefers-reduced-motion: reduce){
@@ -1199,7 +1215,15 @@ a.work-detail-logo:hover{transform:scale(1.08); opacity:0.85;}
 }
 @media (max-width:900px){
   .dialogues-content-row{flex-direction:column; align-items:stretch;}
-  .dialogues-meetbox{width:100%; margin-left:85px;}
+  .dialogues-meetbox{width:calc(100% - 60px); max-width:360px; margin-left:60px; height:420px;}
+}
+@media (max-width:480px){
+  .dialogues-meetbox{width:calc(100% - 45px); margin-left:45px; height:380px;}
+  .dialogues-blob{left:-32px; width:170px; height:100px;}
+  .dialogues-blob--1{top:18px;}
+  .dialogues-blob--2{top:135px;}
+  .dialogues-blob--3{top:252px;}
+  .dialogues-meetbox-text{width:120px; font-size:15px; top:18px; height:340px;}
 }
 
 
@@ -1716,7 +1740,40 @@ footer.site-footer{
   display:flex; flex-direction:column; align-items:center;
   font-family:'Inter',sans-serif; font-size:13px; color:var(--text-secondary); text-align:center;
 }
-.footer-copy{font-weight:400; color:var(--charcoal);}
+.footer-copy{
+  font-weight:400; color:var(--charcoal);
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap;
+  gap:14px;
+}
+.footer-social{display:inline-flex; align-items:center; gap:5px;}
+.footer-social-item{
+  position:relative; width:20px; height:20px;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--charcoal); opacity:0.85; text-decoration:none;
+  transition:opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.footer-social-item svg{position:relative; z-index:1; width:14px; height:14px;}
+.footer-social-item::before{
+  content:''; position:absolute; inset:-6px; border-radius:50%;
+  background:var(--terracotta); opacity:0; transform:scale(0.4);
+  transition:opacity 0.3s ease, transform 0.35s cubic-bezier(.34,1.56,.64,1);
+}
+.footer-social-item:hover, .footer-social-item:focus-visible{
+  opacity:1; transform:translateY(-2px);
+}
+.footer-social-item:hover::before, .footer-social-item:focus-visible::before{
+  opacity:0.16; transform:scale(1);
+}
+.footer-social-item:nth-child(1):hover{color:var(--blush);}
+.footer-social-item:nth-child(1):hover::before{background:var(--blush);}
+.footer-social-item:nth-child(2):hover{color:var(--teal);}
+.footer-social-item:nth-child(2):hover::before{background:var(--teal);}
+.footer-social-item:nth-child(3):hover{color:var(--sandstone);}
+.footer-social-item:nth-child(3):hover::before{background:var(--sandstone);}
+.footer-social-item:nth-child(4):hover{color:var(--terracotta);}
+.footer-social-item:nth-child(4):hover::before{background:var(--terracotta);}
+.footer-social-item:nth-child(5):hover{color:var(--sage);}
+.footer-social-item:nth-child(5):hover::before{background:var(--sage);}
 
 /* ---- Full-screen loader shown while the page's content (fonts, images, iframes)
    is still loading. Butterflies from the "Thinking through cities" section reused
