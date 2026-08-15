@@ -94,7 +94,7 @@ header{display:flex; justify-content:space-between; align-items:center; padding:
   background:var(--charcoal); vertical-align:0.05em;
 }
 
-.role-marquee{margin-top:clamp(-14px, -2.6vw, -36px); margin-left:8px;}
+.role-marquee{margin-top:clamp(-6px, -1.8vw, -28px); margin-left:8px;}
 .role-marquee-viewport{height:30px; overflow:hidden;}
 .role-marquee-track{
   display:flex; flex-direction:column;
@@ -108,7 +108,7 @@ header{display:flex; justify-content:space-between; align-items:center; padding:
   text-transform:none; color:var(--charcoal); white-space:nowrap;
 }
 @media (max-width:640px){
-  .role-marquee{margin-top:-6px; margin-left:2px;}
+  .role-marquee{margin-top:-1px; margin-left:2px;}
   .role-marquee-viewport{height:22px;}
   .role-marquee-track span{height:22px; font-size:14px; letter-spacing:0.02em;}
 }
@@ -129,7 +129,7 @@ header{display:flex; justify-content:space-between; align-items:center; padding:
 @media (prefers-reduced-motion: reduce){
   .urdu-marquee-track{animation:none;}
 }
-.urdu-bold-wrap{padding:34px 0 24px; flex:1 1 320px; display:flex; align-items:center; justify-content:flex-end; align-self:center;}
+.urdu-bold-wrap{padding:34px 0 24px; flex:1 1 320px; display:flex; flex-direction:column; align-items:flex-end; justify-content:center; align-self:center; gap:2px;}
 .urdu-line{
   font-family:'Noto Nastaliq Urdu', serif; font-weight:700; font-size:clamp(18px,3vw,34px); line-height:2.3;
   color:var(--charcoal); direction:rtl; text-align:right; width:100%;
@@ -137,7 +137,34 @@ header{display:flex; justify-content:space-between; align-items:center; padding:
 }
 .revealed .urdu-line{animation:typeReveal 2s steps(20) forwards;}
 @keyframes typeReveal{to{clip-path:inset(0 0 0 0%);}}
+/* quiet translator's-note under the Urdu line, styled as the same hand-painted
+   brush-stroke pill as the studio tagline ("Ai? I made these...") - charcoal fill
+   with paper/white text, mirroring that tagline's dark-stroke treatment. Opacity
+   fades in once the typewriter reveal above has had time to finish. */
+.urdu-translation-wrap{text-align:right; width:100%; opacity:0; transition:opacity 1.1s ease 1.7s;}
+.revealed .urdu-translation-wrap{opacity:1;}
+.urdu-translation{
+  position:relative; display:inline-flex; align-items:center;
+  padding:9px 20px; margin-right:2px;
+  font-family:'Special Elite','Inter',monospace; font-weight:400;
+  font-size:clamp(12px,1.3vw,14px); letter-spacing:0.01em; color:var(--paper);
+  direction:ltr;
+}
+.urdu-translation::before{
+  content:""; position:absolute; inset:-6px -4px; z-index:-1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70' preserveAspectRatio='none'%3E%3Cpath d='M6,38 C3,20 14,6 34,6 C110,2 200,3 268,7 C288,8 297,22 296,36 C298,54 286,66 264,65 C190,68 100,67 30,64 C10,63 4,54 6,38 Z' fill='%232B2B2B'/%3E%3C/svg%3E");
+  background-size:100% 100%; background-repeat:no-repeat;
+  clip-path:inset(0 100% 0 0);
+}
+.revealed .urdu-translation::before{animation:brushPaint 0.75s cubic-bezier(0.16,1,0.3,1) 1.7s forwards;}
+@media (prefers-reduced-motion: reduce){
+  .urdu-translation::before{clip-path:inset(0 0 0 0); animation:none;}
+}
+}
 .urdu-break{padding:16px 0 0; text-align:center;}
+@media (prefers-reduced-motion: reduce){
+  .urdu-translation{transition:none;}
+}
 
 .street-wrap{position:relative; margin-top:20px;}
 svg#scene{width:100%; height:auto; display:block;}
@@ -668,6 +695,258 @@ button,
   .reflection-card-title{font-size:11px;}
   .reflection-card-text{font-size:11.5px;}
 }
+/* ---- "Let's talk books": a subsection right after Reflections. Laid out exactly
+   like Cartographic Work (.map-feature-row) - text column top-left, photo filling the
+   right column at matching height, both align-items:start so the heading and photo's
+   top edges land parallel. ---- */
+.talkbooks-title-line{display:flex; align-items:center; gap:12px; justify-content:flex-start;}
+.talkbooks-icon{
+  position:relative; width:40px; height:40px; flex-shrink:0;
+  opacity:0.55; perspective:220px;
+}
+.talkbooks-cover{
+  position:absolute; top:6%; width:44%; height:88%;
+  background:var(--win-lit); border-radius:3px;
+}
+.talkbooks-cover--left{left:2%;}
+.talkbooks-cover--right{right:2%;}
+.talkbooks-page-left{
+  position:absolute; top:6%; left:2%; width:44%; height:88%;
+  background:var(--paper); opacity:0.85; border-radius:3px;
+  transform-origin:right center; transform-style:preserve-3d;
+  animation:talkbooksPageFlipLeft 2.8s ease-in-out infinite;
+}
+@keyframes talkbooksPageFlipLeft{
+  0%, 100%{transform:rotateY(0deg);}
+  50%{transform:rotateY(165deg);}
+}
+.talkbooks-spine{
+  position:absolute; left:47%; top:5%; width:6%; height:90%;
+  background:var(--win-lit); border-radius:2px;
+}
+.talkbooks-flip{
+  position:absolute; top:6%; right:2%; width:44%; height:88%;
+  background:var(--paper); opacity:0.85; border-radius:3px;
+  transform-origin:left center; transform-style:preserve-3d;
+  animation:talkbooksPageFlip 2.8s ease-in-out infinite;
+}
+@keyframes talkbooksPageFlip{
+  0%, 100%{transform:rotateY(0deg);}
+  50%{transform:rotateY(-165deg);}
+}
+/* photo + heading laid out exactly like Cartographic Work (.map-feature-row): text
+   column on the left (top-aligned, not centered), photo filling the right column,
+   object-fit:cover, rounded on the inside edge only. */
+.talkbooks-row{
+  width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+  display:grid; grid-template-columns:1fr minmax(260px, min(38%, 480px)); align-items:start;
+}
+.talkbooks-left-col{padding:0 clamp(20px,4vw,40px) 24px clamp(24px,5vw,64px);}
+.talkbooks-photo-wrap{aspect-ratio:4/5; overflow:hidden; border-radius:16px 0 0 16px;}
+.talkbooks-photo{width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block;}
+@media (max-width:900px){
+  .talkbooks-row{grid-template-columns:1fr;}
+  .talkbooks-photo-wrap{order:1; border-radius:0;}
+  .talkbooks-left-col{order:2; padding:24px clamp(20px,5vw,40px) 8px;}
+}
+@media (max-width:640px){
+  .talkbooks-icon{width:30px; height:30px;}
+  .talkbooks-pill-nudge{margin-top:0;}
+}
+@media (prefers-reduced-motion: reduce){
+  .talkbooks-flip, .talkbooks-page-left{animation:none;}
+}
+
+/* Bookshelf now spans the full width of .talkbooks-left-col, sitting further below
+   the heading/pill. Spines are packed edge-to-edge like a real shelf (no gap) and
+   vary in width, height and colour, with a few leaning into their neighbours, so
+   the row reads as an assorted stack of books rather than a uniform-width skyline.
+   Three lie flat at the end, stacked flush with no gap between them. The shelf
+   (row + bar) is only ever as wide as the books themselves - centred when there's
+   room to spare, scrollable instead of clipped when there isn't. .book-stage/
+   .book-open sit outside that scroll container so the expanded book is never
+   clipped by it. --book-tilt carries each spine's lean through hover/active
+   states so those transforms don't clobber it. */
+.bookshelf-wrap{margin-top:68px;}
+.bookshelf-scroll{
+  display:flex; justify-content:safe center; width:100%;
+  overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; -ms-overflow-style:none;
+}
+.bookshelf-scroll::-webkit-scrollbar{display:none;}
+.bookshelf-shelf{width:max-content; flex:none;}
+.bookshelf-row{display:flex; align-items:flex-end; gap:0; padding:0 20px; width:max-content;}
+.book-spine{
+  --book-tilt:0deg;
+  position:relative; border:none; border-radius:3px 3px 0 0; cursor:pointer; padding:0 0 12px;
+  display:flex; align-items:flex-end; justify-content:center; flex:none;
+  transform-origin:bottom center; transform:rotate(var(--book-tilt));
+  box-shadow:inset 2px 0 0 rgba(43,43,43,0.1), inset -1.5px 0 0 rgba(255,255,255,0.16), 1px 0 0 rgba(43,43,43,0.06);
+  transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s ease;
+  overflow:hidden; z-index:1;
+}
+.book-spine:hover, .book-spine:focus-visible{
+  transform:translateY(-6px) scale(1.03) rotate(var(--book-tilt)); z-index:3;
+}
+.book-spine-label{
+  position:relative; z-index:2;
+  writing-mode:vertical-rl; color:rgba(255,255,255,0.75);
+  text-shadow:0 1px 2px rgba(0,0,0,0.25); padding-bottom:2px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-height:100%;
+}
+.book-spine-title{
+  font-family:'Big Shoulders Display',sans-serif; font-weight:700; font-size:10px; letter-spacing:0.01em;
+}
+.book-spine-author{
+  font-family:'Amaranth','Inter',sans-serif; font-size:7.5px; font-style:italic;
+  opacity:0.85; letter-spacing:0.01em; margin-inline-start:5px;
+}
+/* a handful of spines pair a different title/author face, so the shelf doesn't
+   read as one repeated template */
+.book-spine-label--alt .book-spine-title{
+  font-family:'Amaranth','Inter',sans-serif; font-weight:700;
+  text-transform:uppercase; letter-spacing:0.05em; font-size:9px;
+}
+.book-spine-label--alt .book-spine-author{
+  font-family:'Special Elite','Inter',monospace; font-style:italic;
+  letter-spacing:0.01em; font-size:7px;
+}
+/* Size classes applied by JS (fitSpine in script.js) based on each spine's own
+   rendered width/height, and on whether the label actually fits at that size:
+   - wide spines get bigger type; wide AND author-line both switch the label to
+     a two-column layout (title gets its own column, author gets its own)
+     with both columns sharing a common bottom edge (flex align-items:flex-end)
+     instead of the author just trailing after the title on one long line
+   - narrow (tall & thin) spines get smaller type, author still runs on
+     straight after the title on the same line by default
+   - .book-spine--author-line is added independently of width whenever the
+     title+author don't fit together on one line
+   - .book-spine--title-wrap is the last-resort fallback: the title itself
+     gets wrapped onto two lines via an inserted <br> (added by the same JS)
+   - .book-spine--force-inline overrides the two-column layout back to a
+     single trailing line, for specific spines where that reads better */
+.book-spine--wide .book-spine-label,
+.book-spine--author-line .book-spine-label{
+  display:inline-flex; flex-direction:column; align-items:flex-end; gap:1px;
+}
+.book-spine--wide .book-spine-title{font-size:12.5px;}
+.book-spine--wide .book-spine-label--alt .book-spine-title{font-size:11px;}
+.book-spine--wide .book-spine-author{font-size:8px;}
+.book-spine--wide .book-spine-label--alt .book-spine-author{font-size:7.5px;}
+.book-spine--narrow .book-spine-title{font-size:8.5px;}
+.book-spine--narrow .book-spine-label--alt .book-spine-title{font-size:7.5px;}
+.book-spine--narrow .book-spine-author{font-size:6.5px;}
+.book-spine--narrow .book-spine-label--alt .book-spine-author{font-size:6px;}
+.book-spine--title-wrap .book-spine-title{white-space:normal; line-height:1.02;}
+.book-spine--force-inline .book-spine-label{display:inline !important;}
+/* one-off typography tweaks for specific spines, layered on top of the
+   width/height rules above rather than replacing them */
+.book-spine--font-boost .book-spine-title{font-size:11.5px;}
+.book-spine--font-boost .book-spine-author{font-size:8.5px;}
+.book-spine--flat.book-spine--font-boost .book-spine-title{font-size:12.5px;}
+.book-spine--flat.book-spine--font-boost .book-spine-author{font-size:9.5px;}
+.book-spine--center:not(.book-spine--flat){align-items:center; padding-top:6px; padding-bottom:6px;}
+.book-spine--flat.book-spine--center{justify-content:center; padding:0 8px;}
+.book-spine--corner{justify-content:flex-start;}
+.book-spine--flat.book-spine--tight-author .book-spine-author{margin-inline-start:2px;}
+.book-spine--terracotta{background:var(--terracotta);}
+.book-spine--sage{background:var(--sage);}
+.book-spine--teal{background:var(--teal);}
+.book-spine--blush{background:var(--blush);}
+.book-spine--asphalt{background:var(--asphalt);}
+.book-spine--asphalt .book-spine-label, .book-spine--blush .book-spine-label, .book-spine--sage .book-spine-label, .book-spine--gold .book-spine-label{
+  color:rgba(43,43,43,0.62); text-shadow:none;
+}
+.book-spine--gold{background:var(--win-lit);}
+.book-spine.is-active{
+  transform:translateY(-14px) scale(1.1) rotate(var(--book-tilt));
+  box-shadow:0 10px 16px rgba(43,43,43,0.2); z-index:3;
+}
+/* leans: a few spines tip into their neighbour rather than standing dead straight */
+.book-spine--tilt-l{--book-tilt:-4.5deg; margin-right:-3px;}
+.book-spine--tilt-r{--book-tilt:4.5deg; margin-left:-3px;}
+
+/* the four spines resting flat at the end of the shelf, stacked flush with no
+   gap between them. Thicker than a standing spine's width - like the real
+   paperback stack it's modelled on - so title and author sit as two genuine
+   stacked lines instead of being squeezed onto one. */
+.book-stack{
+  position:relative; flex:none; display:flex; flex-direction:column;
+  align-items:flex-start; margin-left:2px;
+}
+.book-spine--flat{
+  flex-direction:row; align-items:center; justify-content:flex-start;
+  border-radius:3px; padding:0 0 0 14px; box-shadow:0 -2px 0 rgba(43,43,43,0.1) inset, 0 2px 4px rgba(43,43,43,0.14);
+}
+.book-spine--flat .book-spine-label{
+  writing-mode:horizontal-tb; padding-bottom:0; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis; max-width:100%; display:inline-block;
+}
+.book-spine--flat .book-spine-title{font-size:10.5px;}
+.book-spine--flat .book-spine-author{font-size:8px; margin-inline-start:5px;}
+.book-spine--flat .book-spine-label--alt .book-spine-title{font-size:9.5px;}
+.bookshelf-bar{height:12px; background:var(--sandstone); border-radius:0 0 3px 3px; box-shadow:0 3px 0 rgba(43,43,43,0.08);}
+/* the open-book stage: positioned absolutely so JS can slide it left/right to sit
+   under whichever spine was clicked - it moves with the spine. Opens on click and
+   stays open (no hover auto-close anymore, since the flip animation is gone there's
+   no swing to replay) until the close (x) button is used. */
+/* height starts at 0 (no reserved space) and is set inline by JS to match the
+   open book's own height only while a book is actually showing - otherwise this
+   fixed-height box was leaving a big empty gap below the shelf at all times,
+   even when no book was open. */
+.book-stage{margin-top:0; height:0; position:relative; width:100%; transition:height 0.32s cubic-bezier(0.16,1,0.3,1), margin-top 0.32s cubic-bezier(0.16,1,0.3,1);}
+.book-stage.has-open{margin-top:12px;}
+.book-open{
+  position:absolute; top:0; left:0; width:min(300px, 100%); max-width:100%;
+  /* height comes from aspect-ratio, not a fixed px guess: two pages side by side,
+     each keeping the same portrait proportions as the reference photo (791x900),
+     so the photo page displays close to its real shape instead of being
+     stretched into a tall, over-cropped sliver */
+  aspect-ratio:791 / 450;
+  box-shadow:0 10px 24px rgba(43,43,43,0.22);
+  opacity:0; transform:translateY(8px) scale(0.98); pointer-events:none;
+  transition:left 0.32s cubic-bezier(0.16,1,0.3,1), opacity 0.2s ease, transform 0.2s ease;
+}
+.book-open.is-open{
+  opacity:1; transform:translateY(0) scale(1); pointer-events:auto;
+}
+.book-open-close{
+  position:absolute; top:6px; right:6px; z-index:3;
+  width:26px; height:26px; display:none; align-items:center; justify-content:center;
+  border:none; cursor:pointer; background:transparent; border-radius:50%;
+  color:var(--charcoal); font-size:17px; line-height:1;
+  text-shadow:0 1px 3px rgba(255,255,255,0.75), 0 0 6px rgba(255,255,255,0.5);
+  transition:background 0.15s ease, transform 0.15s ease;
+}
+.book-open-close:hover, .book-open-close:focus-visible{
+  background:rgba(255,255,255,0.32); transform:scale(1.1);
+}
+.book-open.is-pinned .book-open-close{display:flex;}
+.book-page{
+  width:50%; height:100%; float:left; background:var(--paper);
+  border:0.5px solid var(--border); box-sizing:border-box; overflow:hidden; position:relative;
+}
+.book-page--left{border-right:none; border-radius:6px 0 0 6px;}
+.book-page--right{border-left:1px dashed var(--border); border-radius:0 6px 6px 0;}
+.book-page-photo{width:100%; height:100%; object-fit:cover; display:block;}
+.book-page-text-wrap{padding:14px; height:100%; box-sizing:border-box; overflow:auto;}
+.book-page-title{font-family:'Special Elite','Inter',monospace; font-weight:700; font-size:11px; color:var(--charcoal); margin:0 0 6px;}
+.book-page-text{font-family:'Special Elite','Inter',monospace; font-size:10px; line-height:1.55; color:var(--charcoal); margin:0;}
+@media (prefers-reduced-motion: reduce){
+  .book-spine{transition:none;}
+  .book-open{transition:none;}
+  .book-open-close{transition:none;}
+  .book-stage{transition:none;}
+}
+@media (max-width:640px){
+  .book-spine-title{font-size:9px;}
+  .book-spine--flat .book-spine-title{font-size:9.5px;}
+  .book-spine--wide .book-spine-title{font-size:10.5px;}
+  .book-spine--narrow .book-spine-title{font-size:7.5px;}
+  .book-open{width:min(230px, 100%);}
+  .book-page-title{font-size:10px;}
+  .book-page-text{font-size:9.5px;}
+}
+
 @media (prefers-reduced-motion: reduce){
   .reflection-card, .reflection-card-face{transition:none;}
   .reflection-card:not(.is-flipped):hover{transform:none;}
@@ -1674,6 +1953,18 @@ a.work-detail-logo:hover{transform:scale(1.08); opacity:0.85;}
   position:absolute; inset:-6px -4px; z-index:-1; pointer-events:none;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 70' preserveAspectRatio='none'%3E%3Cpath d='M6,38 C3,20 14,6 34,6 C110,2 200,3 268,7 C288,8 297,22 296,36 C298,54 286,66 264,65 C190,68 100,67 30,64 C10,63 4,54 6,38 Z' fill='%233E2723'/%3E%3C/svg%3E");
   background-size:100% 100%; background-repeat:no-repeat;
+  clip-path:inset(0 100% 0 0);
+}
+.revealed .studio-tagline-stroke{animation:brushPaint 0.8s cubic-bezier(0.16,1,0.3,1) 0.45s forwards;}
+/* the same "drawn on" reveal used on the Urdu translation pill below - a brush swipes
+   left-to-right rather than the fill just fading/popping in, so it reads as painted
+   rather than pasted. */
+@keyframes brushPaint{
+  0%{clip-path:inset(0 100% 0 0);}
+  100%{clip-path:inset(0 0 0 0);}
+}
+@media (prefers-reduced-motion: reduce){
+  .studio-tagline-stroke{clip-path:inset(0 0 0 0); animation:none;}
 }
 .studio-tagline-text{position:relative;}
 .studio-tagline-heart{width:15px; height:15px; flex-shrink:0; color:#C22B21; position:relative;}

@@ -213,6 +213,7 @@
   <section class="urdu-break" data-reveal>
     <div class="urdu-bold-wrap">
       <span class="urdu-line">چلیے شہروں کو نئے انداز سے دیکھتے ہیں۔</span>
+      <span class="urdu-translation-wrap"><span class="urdu-translation">Let's explore cities from a new perspective.</span></span>
     </div>
   </section>
 
@@ -235,7 +236,7 @@
           <a class="index-block" href="#studio" style="background:var(--blush);">
             <span class="index-title">Art Studio</span>
           </a>
-          <a class="index-block" href="#reflections" style="background:var(--asphalt);">
+          <a class="index-block" href="#talk-books" style="background:var(--asphalt);">
             <span class="index-title">Reflections</span>
           </a>
           <a class="index-block index-block-dark" href="#about" style="background:var(--charcoal);">
@@ -950,6 +951,170 @@
     <div class="art-lightbox-count" id="artLightboxCount"></div>
   </div>
 
+  <!-- "Let's talk books": subsection right after Reflections. Heading row mirrors
+       Loose Pages (icon left instead of right, title+pill block right-aligned).
+       Below it, a bookshelf of spines - tap one and it opens in place, revealing a
+       short musing. Placeholder titles/text/colors below; swap data-title/data-meta/
+       data-text and the book-spine--{color} class per spine, same convention as every
+       other placeholder section on the site (swap the data, it just works). -->
+  <section id="talk-books" class="page-hero" data-reveal>
+    <div class="talkbooks-row">
+      <div class="talkbooks-left-col">
+        <div class="section-heading-block section-heading-block--left">
+          <div class="talkbooks-title-line">
+            <h2 class="work-heading work-heading--left">Let's Talk Books</h2>
+            <div class="talkbooks-icon" aria-hidden="true">
+              <div class="talkbooks-cover talkbooks-cover--left"></div>
+              <div class="talkbooks-page-left"></div>
+              <div class="talkbooks-cover talkbooks-cover--right"></div>
+              <div class="talkbooks-spine"></div>
+              <div class="talkbooks-flip"></div>
+            </div>
+          </div>
+          <span class="pill pill--static pill--blob-a talkbooks-pill-nudge">Musings</span>
+        </div>
+
+        <div class="bookshelf-wrap" id="bookshelfWrap">
+          <div class="bookshelf-scroll">
+          <div class="bookshelf-shelf">
+          <div class="bookshelf-row" id="bookshelfRow">
+            <button class="book-spine book-spine--asphalt book-spine--font-boost book-spine--force-inline book-spine--center" type="button" data-book-trigger style="height:230px; width:28px"
+              data-title="The Death and Life of Great American Cities" data-subtitle="Where I started seeing cities differently" data-photo-side="left"
+              data-img="books/b17.jpg"
+              data-text="I remember reading The Death and Life of Great American Cities and realising that the city could be read differently. The sidewalk was no longer just a sidewalk. A neighbourhood was more than its buildings. People watching, street life, mixed uses, children playing, shops opening onto the street, strangers looking out for one another. Suddenly, all these ordinary things felt like pieces of a much bigger urban story. Somewhere in those pages, the way I looked at cities changed.">
+              <span class="book-spine-label"><span class="book-spine-title">The Death and Life of Great American Cities</span> <span class="book-spine-author">Jane Jacobs</span></span>
+            </button>
+            <button class="book-spine book-spine--gold book-spine--center" type="button" data-book-trigger style="height:198px; width:60px"
+              data-title="Atlas of the Senseable City" data-subtitle="When data starts telling stories" data-photo-side="right"
+              data-img="books/b3.jpg"
+              data-text="The intersection of people, cities and technology had never felt so fascinating. The Atlas of the Senseable City brings together vivid maps, data and stories to reveal the hidden dynamics of urban life. What I loved most was not just the information, but how beautifully it was communicated. It reminded me that visualising complexity is one thing, but turning it into a story people can actually connect with is an art in itself. A special thanks to Momin Uppal for lending me this one. 🙂">
+              <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">Atlas of the Senseable City</span> <span class="book-spine-author">Antoine Picon &amp; Carlo Ratti</span></span>
+            </button>
+            <button class="book-spine book-spine--sage book-spine--tilt-r" type="button" data-book-trigger style="height:214px; width:42px"
+              data-title="Curbing Traffic" data-subtitle="What if streets were about more than cars?" data-photo-side="left"
+              data-img="books/b4.jpg"
+              data-text="A book that asks a deceptively simple question: what happens when we stop designing our streets primarily around traffic? Curbing Traffic explores the human side of streets, from walking and cycling to public life, children and the everyday experiences that often disappear beneath the priority given to cars. Exactly the kind of book that makes an urban planner look at an ordinary street a little differently.">
+              <span class="book-spine-label"><span class="book-spine-title">Curbing Traffic</span> <span class="book-spine-author">Melissa Bruntlett &amp; Chris Bruntlett</span></span>
+            </button>
+            <button class="book-spine book-spine--terracotta" type="button" data-book-trigger style="height:222px; width:30px"
+              data-title="The City at Eye Level for Kids" data-subtitle="Seeing cities from a child's height" data-photo-side="right"
+              data-img="books/b18.jpg"
+              data-text="A particularly useful book for my research on child-friendly cities. It pushed me to think about the city from a child's perspective: what streets feel like, how public spaces are experienced, where children can move independently, and what makes a place inviting rather than intimidating. A useful reminder that sometimes, to understand a city properly, you need to change your eye level.">
+              <span class="book-spine-label"><span class="book-spine-title">The City at Eye Level for Kids</span> <span class="book-spine-author">Rosa Danenberg, Vivian Doumpa &amp; Hans Karssenberg</span></span>
+            </button>
+            <button class="book-spine book-spine--gold book-spine--tilt-l" type="button" data-book-trigger style="height:234px; width:36px"
+              data-title="Designing Streets for Kids" data-subtitle="A little too useful for my research" data-photo-side="right"
+              data-img="books/b19.jpg"
+              data-text="This guide was almost single-handedly useful in developing indicators for children's mobility in my research. Safety, crossings, cycling, play, accessibility and all the little details that influence how children experience streets. It gave me a much clearer way to think about what child-friendly mobility actually looks like on the ground. I may love the GDCI guides a little too much.">
+              <span class="book-spine-label"><span class="book-spine-title">Designing Streets for Kids</span> <span class="book-spine-author">Global Designing Cities Initiative</span></span>
+            </button>
+            <button class="book-spine book-spine--blush" type="button" data-book-trigger style="height:206px; width:38px"
+              data-title="The Forty Rules of Love" data-subtitle="The one I always come back to" data-photo-side="right"
+              data-img="books/b7.jpg"
+              data-text="No matter how many new books I come across, this will always be one of my favourites. It changed something inside me. Thank you, Elif Shafak, for making me fall even more deeply in love with the stories of Rumi and Shams.">
+              <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">The Forty Rules of Love</span> <span class="book-spine-author">Elif Shafak</span></span>
+            </button>
+            <button class="book-spine book-spine--teal book-spine--tilt-r" type="button" data-book-trigger style="height:218px; width:32px"
+              data-title="The Pocket Rumi" data-subtitle="A little Rumi in my pocket" data-photo-side="left"
+              data-img="books/b8.jpg"
+              data-text="Quite literally my travel companion. A small book to carry around, open randomly, read a few lines and somehow find exactly the words needed in that moment. Rumi has a way of doing that.">
+              <span class="book-spine-label"><span class="book-spine-title">The Pocket Rumi</span> <span class="book-spine-author">Rumi, tr. Kabir Helminski</span></span>
+            </button>
+            <button class="book-spine book-spine--teal book-spine--force-inline" type="button" data-book-trigger style="height:190px; width:46px"
+              data-title="Urban Playground" data-subtitle="Let them play" data-photo-side="left"
+              data-img="books/b20.jpg"
+              data-text="A really good one. Tim Gill makes a strong case for looking beyond traditional playgrounds and recognising the whole city as part of a child's play environment. Streets, parks, public spaces, neighbourhoods and all those ordinary places where children explore, take risks, meet others and figure things out for themselves. I loved how it challenges the idea that play needs to happen inside a designated playground. Sometimes the city itself can be the playground.">
+              <span class="book-spine-label"><span class="book-spine-title">Urban Playground</span> <span class="book-spine-author">Tim Gill</span></span>
+            </button>
+            <button class="book-spine book-spine--sage book-spine--tilt-l book-spine--force-inline book-spine--center" type="button" data-book-trigger style="height:226px; width:28px"
+              data-title="The Fifth Agreement" data-subtitle="A little Toltec wisdom" data-photo-side="left"
+              data-img="books/b10.jpg"
+              data-text="An inspiring read on perception, communication, beliefs and the stories we create around ourselves. I like how simple some of the ideas are, yet how much they make you stop and think. One of those books that gives you something to reflect on long after you've put it down.">
+              <span class="book-spine-label"><span class="book-spine-title">The Fifth Agreement</span> <span class="book-spine-author">Don Miguel Ruiz &amp; Don Jose Ruiz</span></span>
+            </button>
+            <button class="book-spine book-spine--blush book-spine--center" type="button" data-book-trigger style="height:202px; width:52px"
+              data-title="The Judaization of Jerusalem" data-subtitle="Reading the history of a contested city" data-photo-side="right"
+              data-img="books/b11.jpg"
+              data-text="A gem for anyone trying to understand Jerusalem beyond the postcard. This book took me deeper into the history of the city, its changing identity, displacement, political transformation and the ways in which space, memory and power become intertwined. It was difficult to read at times, but important. Understanding a place also means understanding the history written into it.">
+              <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">The Judaization of Jerusalem</span> <span class="book-spine-author">Rouhi El-Khatib</span></span>
+            </button>
+            <button class="book-spine book-spine--terracotta book-spine--font-boost" type="button" data-book-trigger style="height:216px; width:30px"
+              data-title="The Four Agreements" data-subtitle="The idea of “domestication” got me" data-photo-side="left"
+              data-img="books/b12.jpg"
+              data-text="One of my favourite parts of this book is the idea of the domestication of humans: how, from childhood, we absorb rules, expectations and ideas about who we are supposed to be. We learn what is acceptable, what is not, what makes us worthy, what makes us successful, and eventually begin carrying those rules ourselves. That idea really made me stop and think about how much of what we believe is actually ours.">
+              <span class="book-spine-label"><span class="book-spine-title">The Four Agreements</span> <span class="book-spine-author">Don Miguel Ruiz</span></span>
+            </button>
+            <button class="book-spine book-spine--sage book-spine--tilt-r" type="button" data-book-trigger style="height:200px; width:44px"
+              data-title="Thousand Splendid Suns" data-subtitle="Some books hit differently" data-photo-side="right"
+              data-img="books/b5.jpg"
+              data-text="This one hurt. A story of friendship, sacrifice, love, loss and survival, set against decades of Afghanistan's history. I remember reaching the end and simply sitting there, completely overwhelmed.">
+              <span class="book-spine-label"><span class="book-spine-title">Thousand Splendid Suns</span> <span class="book-spine-author">Khaled Hosseini</span></span>
+            </button>
+            <button class="book-spine book-spine--blush book-spine--font-boost" type="button" data-book-trigger style="height:228px; width:28px"
+              data-title="The Alchemist" data-subtitle="A gift with a note I still keep" data-photo-side="right"
+              data-img="books/b9.jpg"
+              data-text="Thank you, my dear Sara, for the book and for the beautiful note you wrote inside it. I still hold that note close. There is something special about books that arrive with someone's handwriting, words meant only for you, tucked between the pages.">
+              <span class="book-spine-label"><span class="book-spine-title">The Alchemist</span> <span class="book-spine-author">Paulo Coelho</span></span>
+            </button>
+            <button class="book-spine book-spine--teal book-spine--tilt-l" type="button" data-book-trigger style="height:210px; width:36px"
+              data-title="The Placemaking Cookbook" data-subtitle="From Lahore to Salzburg and Brussels" data-photo-side="right"
+              data-img="books/b15.jpg"
+              data-text="Starting out in placemaking felt a little daunting, but this cookbook made the process much more approachable. I received it from Bram, founder of Urban Foxes, during my visit to Brussels. Since then, it has travelled with me into my own work. I have used ideas from it while engaging children in street design activities in both Lahore and Salzburg. A cookbook that actually made its way out of the bookshelf and into the streets.">
+              <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">The Placemaking Cookbook</span> <span class="book-spine-author">Urban Foxes</span></span>
+            </button>
+            <button class="book-spine book-spine--asphalt" type="button" data-book-trigger style="height:194px; width:54px"
+              data-title="Walking in the City with Jane" data-subtitle="Walking through cities with Jane" data-photo-side="left"
+              data-img="books/b6.jpg"
+              data-text="A beautifully illustrated introduction to Jane Jacobs and the ideas that changed how we think about cities. Walking through the city with Jane means noticing the things that make neighbourhoods alive: people on sidewalks, children playing, local shops, mixed uses, everyday encounters and communities that know their own streets best.">
+              <span class="book-spine-label"><span class="book-spine-title">Walking in the City with Jane</span> <span class="book-spine-author">Susan Hughes &amp; Valérie Boivin</span></span>
+            </button>
+            <div class="book-stack">
+              <button class="book-spine book-spine--flat book-spine--blush book-spine--center" type="button" data-book-trigger style="height:26px; width:112px"
+                data-title="Books That Stayed" data-subtitle="The ones I needed at the time" data-photo-side="left"
+                data-img="books/b16.jpg"
+                data-text="There were years when I didn't quite know how to make sense of what I was feeling. Books became a place to disappear into, but also a way to understand myself a little better. Some gave me company when I felt alone. Some gave me words for things I couldn't explain. Some simply gave me somewhere else to be for a few hours. I don't remember every book I have read. I remember the ones that found me at the right time.">
+                <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">Books That Stayed</span></span>
+              </button>
+              <button class="book-spine book-spine--flat book-spine--terracotta book-spine--tight-author book-spine--center" type="button" data-book-trigger style="height:26px; width:120px"
+                data-title="Moth Smoke" data-subtitle="A little too close to home" data-photo-side="left"
+                data-img="books/b2.jpg"
+                data-text="Mohsin Hamid has a way of making places feel uncomfortably familiar. Moth Smoke took me into a Lahore of ambition, privilege, desire and uncertainty, a side of the city that felt both fictional and strangely recognisable. One of those books that made me look at a familiar place through a different lens.">
+                <span class="book-spine-label"><span class="book-spine-title">Moth Smoke</span> <span class="book-spine-author">Mohsin Hamid</span></span>
+              </button>
+              <button class="book-spine book-spine--flat book-spine--sage" type="button" data-book-trigger style="height:26px; width:150px"
+                data-title="The Power" data-subtitle="A different way of looking at everyday life" data-photo-side="right"
+                data-img="books/b13.jpg"
+                data-text="This book really changed the way I think about everyday life. It made me pay more attention to thoughts, feelings, gratitude, relationships and the energy we bring into ordinary moments. Some of its ideas are simple, but sometimes simple ideas are exactly the ones that make you pause and reconsider how you move through your day.">
+                <span class="book-spine-label book-spine-label--alt"><span class="book-spine-title">The Power</span> <span class="book-spine-author">Rhonda Byrne</span></span>
+              </button>
+              <button class="book-spine book-spine--flat book-spine--gold book-spine--font-boost" type="button" data-book-trigger style="height:26px; width:130px"
+                data-title="A Planner's Bookshelf" data-subtitle="A few books that shaped my practice" data-photo-side="left"
+                data-img="books/b14.jpg"
+                data-text="Some of my favourite books on cities, streets, public space, people and urban planning. From Jane Jacobs to child-friendly streets and placemaking, these are the books I keep around when I want to understand cities beyond maps, plans, and reports.">
+                <span class="book-spine-label"><span class="book-spine-title">A Planner's Bookshelf</span></span>
+              </button>
+            </div>
+          </div>
+          <div class="bookshelf-bar"></div>
+          </div>
+          </div>
+
+          <div class="book-stage" id="bookStage">
+            <div class="book-open" id="bookOpen" hidden>
+              <button class="book-open-close" id="bookOpenClose" aria-label="Close book">&times;</button>
+              <div class="book-page book-page--left" id="bookPageLeft"></div>
+              <div class="book-page book-page--right" id="bookPageRight"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="talkbooks-photo-wrap">
+        <img class="talkbooks-photo" src="books/b1.jpg" alt="Amna reaching for a book on a bookshop shelf">
+      </div>
+    </div>
+  </section>
+
   <section id="reflections" class="page-hero" data-reveal>
     <div class="section-heading-block section-heading-block--left">
       <h2 class="work-heading work-heading--left">Loose Pages</h2>
@@ -1005,16 +1170,16 @@
           <div class="reflection-card-face reflection-card-face--front">
             <img class="reflection-card-photo" src="images/reflection/r2.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
             <span class="reflection-card-caption">
-              <span class="reflection-card-date">London, UK</span>
-              <span class="reflection-card-title">Urbanist's Shelf</span>
+              <span class="reflection-card-date">Vienna, AT</span>
+              <span class="reflection-card-title">First Eid Abroad</span>
             </span>
           </div>
           <div class="reflection-card-face reflection-card-face--back reflection-card-face--text">
             <img class="reflection-card-blur-bg" src="images/reflection/r2.jpg" alt="" aria-hidden="true" loading="lazy" onerror="this.remove();">
             <span class="reflection-card-glass-tint" aria-hidden="true"></span>
             <div class="reflection-card-text-scroll">
-              <span class="reflection-card-date">October 2023</span>
-              <p class="reflection-card-text">Some cities are explored on foot. Others follow you home in the form of books.<br>I came back from London with a small stack of urban planning books, each one offering a different way of looking at streets, neighbourhoods, children, public life, and the people who make cities work. Books by Jane Jacobs, ideas about streets for children, questions about how cities are designed and who they are really designed for. My kind of souvenir.</p>
+              <span class="reflection-card-date">April 2025</span>
+              <p class="reflection-card-text">My first Eid away from home. I celebrated in Vienna with friends from Pakistan, sharing food, stories, laughter, and all those little traditions that suddenly feel much more important when you are far away from them. Eid hits differently when home is a flight away. For a day, we recreated a little piece of what we had left behind, surrounded by people who understood exactly what it meant to miss it. It wasn't home, but somehow, it felt a little closer.</p>
             </div>
           </div>
         </div>
@@ -1081,16 +1246,16 @@
           <div class="reflection-card-face reflection-card-face--front">
             <img class="reflection-card-photo" src="images/reflection/r6.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
             <span class="reflection-card-caption">
-              <span class="reflection-card-date">Brussels, BE</span>
-              <span class="reflection-card-title">Along the Way</span>
+              <span class="reflection-card-date">Olomouc, CZ</span>
+              <span class="reflection-card-title">Paper Trails</span>
             </span>
           </div>
           <div class="reflection-card-face reflection-card-face--back reflection-card-face--text">
             <img class="reflection-card-blur-bg" src="images/reflection/r6.jpg" alt="" aria-hidden="true" loading="lazy" onerror="this.remove();">
             <span class="reflection-card-glass-tint" aria-hidden="true"></span>
             <div class="reflection-card-text-scroll">
-              <span class="reflection-card-date">September 2025</span>
-              <p class="reflection-card-text">There is something lovely about meeting someone for the first time when you have already known them for years, but had never actually met. Years of emails, shared work, and names you have seen again and again, and then suddenly, you are sitting across the same table in Brussels. Grateful to Urban Foxes and Bram for the lovely time, the conversations, and the little souvenir from Brussels, the Placemaking Cookbook.</p>
+              <span class="reflection-card-date">December 2025</span>
+              <p class="reflection-card-text">Tickets, conference badges, books, papers, stamps, little notes and things picked up along the way. Some are souvenirs from places I travelled to, others are reminders of work, people I met, events I attended, or ideas that stayed with me. I like keeping these small, physical traces of where life has taken me. They may look like scraps of paper, but together they tell a surprisingly good story.</p>
             </div>
           </div>
         </div>
@@ -1119,16 +1284,16 @@
           <div class="reflection-card-face reflection-card-face--front">
             <img class="reflection-card-photo" src="images/reflection/r8.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
             <span class="reflection-card-caption">
-              <span class="reflection-card-date">Sialkot, PK</span>
-              <span class="reflection-card-title">Dear Jane</span>
+              <span class="reflection-card-date">Salzburg, AT</span>
+              <span class="reflection-card-title">Shared Spaces</span>
             </span>
           </div>
           <div class="reflection-card-face reflection-card-face--back reflection-card-face--text">
             <img class="reflection-card-blur-bg" src="images/reflection/r8.jpg" alt="" aria-hidden="true" loading="lazy" onerror="this.remove();">
             <span class="reflection-card-glass-tint" aria-hidden="true"></span>
             <div class="reflection-card-text-scroll">
-              <span class="reflection-card-date">October 2019</span>
-              <p class="reflection-card-text">I remember reading <em>The Death and Life of Great American Cities</em> and realising that the city could be read differently. The sidewalk was no longer just a sidewalk. A neighbourhood was more than its buildings. People watching, street life, mixed uses, children playing, shops opening onto the street, strangers looking out for one another. Suddenly, all these ordinary things felt like pieces of a much bigger urban story. Somewhere in those pages, the way I looked at cities changed.</p>
+              <span class="reflection-card-date">June 2026</span>
+              <p class="reflection-card-text">Salzburg Global's annual Fest im Park has quietly become a little tradition. For the second year in a row, Schloss Leopoldskron opens its doors to the wider community for an afternoon of music, conversations, shared ideas, children running around, and people from all kinds of backgrounds coming together. Perhaps that is what keeps drawing me back. Not just the beauty of the place, but the way it is experienced and shared. For someone living away from home, moments like these create something surprisingly rare: a sense of belonging. As urban planners and designers, we often focus on the physical qualities of places. But experiences like Fest im Park are a reminder that how we open up, activate, and share those places matters just as much. A beautiful place already exists. What changes is how people experience it. Maybe that is also how a city slowly starts to feel like home. &lt;3</p>
             </div>
           </div>
         </div>
@@ -1177,16 +1342,15 @@
             <img class="reflection-card-photo" src="images/reflection/r11.jpg" alt="" loading="lazy" onerror="this.parentElement.classList.add('img-missing'); this.remove();">
             <span class="reflection-card-caption">
               <span class="reflection-card-date">Sialkot, PK</span>
-              <span class="reflection-card-title">Books that Stayed</span>
+              <span class="reflection-card-title">On Freedom</span>
             </span>
           </div>
           <div class="reflection-card-face reflection-card-face--back reflection-card-face--text">
             <img class="reflection-card-blur-bg" src="images/reflection/r11.jpg" alt="" aria-hidden="true" loading="lazy" onerror="this.remove();">
             <span class="reflection-card-glass-tint" aria-hidden="true"></span>
             <div class="reflection-card-text-scroll">
-              <span class="reflection-card-date">October 2018</span>
-              <p class="reflection-card-text">There were years when I didn't quite know how to make sense of what I was feeling. Books became a place to disappear into, but also a way to understand myself a little better.</p>
-              <p class="reflection-card-text">Some gave me company when I felt alone. Some gave me words for things I couldn't explain. Some simply gave me somewhere else to be for a few hours. I don't remember every book I have read. I remember the ones that found me at the right time.</p>
+              <span class="reflection-card-date">July 2018</span>
+              <p class="reflection-card-text">Maybe freedom is not having everything figured out. Maybe it is having the courage to choose your own direction, even when you don't know exactly where it will lead. To make mistakes, change your mind, begin again, leave when you need to, stay when you want to, and build a life that feels like your own. For me, freedom has always been somewhere in between certainty and possibility. It is having enough room to wonder, to change, and to become someone I haven't met yet.</p>
             </div>
           </div>
         </div>

@@ -203,7 +203,7 @@ if(scrollNavLabelEl){
   const sectionLabels = {
     work:"The Work", "in-conversation":"In Conversation",
     "visual-practice":"Visual Practice", studio:"Art Studio",
-    reflections:"Reflections", about:"The Journey"
+    "talk-books":"Reflections", reflections:"Reflections", about:"The Journey"
   };
   const spySections = Object.keys(sectionLabels)
     .map(id => document.getElementById(id))
@@ -1411,6 +1411,196 @@ if(document.fonts && document.fonts.ready){
       demoObserver.observe(grid);
     }
   }
+})();
+
+// ---- Bookshelf ("Let's talk books"): hovering a spine previews its book, sliding to
+// sit underneath it. Clicking a spine pins that book open so it stays put even after
+// your mouse leaves - a small subtle x inside the book (not a floating badge) unpins
+// and closes it. While pinned, hovering other spines doesn't change the preview; you
+// have to close or click a different spine first. One page is always a photo with its
+// title overlaid, the other is the musing text - which side gets the photo alternates
+// per spine via data-photo-side. ----
+(function(){
+  const spines = document.querySelectorAll('[data-book-trigger]');
+  const wrap = document.getElementById('bookshelfWrap');
+  const stage = document.getElementById('bookStage');
+  if(!spines.length || !wrap || !stage) return;
+  const open = document.getElementById('bookOpen');
+  const closeBtn = document.getElementById('bookOpenClose');
+  const pageLeft = document.getElementById('bookPageLeft');
+  const pageRight = document.getElementById('bookPageRight');
+  let pinned = false;
+  let hideTimer = null;
+
+  function photoPageHTML(spine){
+    const img = spine.dataset.img || '';
+    const title = spine.dataset.title || '';
+    return '<img class="book-page-photo" src="' + img + '" alt="' + title + '">';
+  }
+
+  function textPageHTML(spine){
+    const subtitle = spine.dataset.subtitle || '';
+    const text = spine.dataset.text || '';
+    return '<div class="book-page-text-wrap">' +
+      '<p class="book-page-title">' + subtitle + '</p>' +
+      '<p class="book-page-text">' + text + '</p>' +
+      '</div>';
+  }
+
+  function positionUnderSpine(spine){
+    const stageRect = stage.getBoundingClientRect();
+    const spineRect = spine.getBoundingClientRect();
+    const spineCenter = (spineRect.left - stageRect.left) + spineRect.width / 2;
+    const openWidth = open.offsetWidth;
+    const maxLeft = Math.max(0, stage.clientWidth - openWidth);
+    const left = Math.min(Math.max(0, spineCenter - openWidth / 2), maxLeft);
+    open.style.left = left + 'px';
+  }
+
+  // .book-stage reserves no space at all by default (height:0 in CSS) - it only
+  // grows to match the open book's actual rendered height while a book is
+  // showing, and shrinks back to 0 once it's fully closed. Without this the
+  // stage sat at a fixed height at all times, leaving a large empty gap under
+  // the shelf even with no book open.
+  function syncStageHeight(isOpen){
+    if(isOpen){
+      stage.classList.add('has-open');
+      stage.style.height = open.offsetHeight + 'px';
+    } else {
+      stage.style.height = '0px';
+      stage.classList.remove('has-open');
+    }
+  }
+
+  function showBook(spine){
+    clearTimeout(hideTimer);
+    spines.forEach(s => s.classList.remove('is-active'));
+    spine.classList.add('is-active');
+
+    const photoOnLeft = spine.dataset.photoSide !== 'right';
+    pageLeft.innerHTML = photoOnLeft ? photoPageHTML(spine) : textPageHTML(spine);
+    pageRight.innerHTML = photoOnLeft ? textPageHTML(spine) : photoPageHTML(spine);
+
+    open.hidden = false;
+    positionUnderSpine(spine);
+    syncStageHeight(true);
+    // fade/scale in on the next frame so the hidden->visible change above has
+    // already taken effect and the transition actually has something to animate
+    requestAnimationFrame(() => open.classList.add('is-open'));
+  }
+
+  // Closing fades the book out smoothly instead of yanking it away instantly:
+  // the .is-open class drives the CSS opacity/transform transition, and only
+  // once that finishes do we set hidden=true so it's properly removed from
+  // layout and the accessibility tree. The stage collapses in parallel.
+  function closeBook(){
+    pinned = false;
+    open.classList.remove('is-pinned', 'is-open');
+    spines.forEach(s => s.classList.remove('is-active'));
+    syncStageHeight(false);
+    clearTimeout(hideTimer);
+    hideTimer = window.setTimeout(() => { open.hidden = true; }, 220);
+  }
+
+  spines.forEach(spine => {
+    spine.addEventListener('mouseenter', () => { if(!pinned) showBook(spine); });
+    spine.addEventListener('focus', () => { if(!pinned) showBook(spine); });
+    spine.addEventListener('click', () => { pinned = true; showBook(spine); open.classList.add('is-pinned'); });
+  });
+  wrap.addEventListener('mouseleave', () => { if(!pinned) closeBook(); });
+  wrap.addEventListener('focusout', (e) => {
+    if(!pinned && !wrap.contains(e.relatedTarget)) closeBook();
+  });
+  if(closeBtn){
+    closeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      closeBook();
+    });
+  }
+  document.addEventListener('keydown', (e) => {
+    if(e.key === 'Escape' && !open.hidden) closeBook();
+  });
+  window.addEventListener('resize', () => { if(!open.hidden) syncStageHeight(true); });
+})();
+
+
+// ---- Bookshelf spine type-fitting: scales each standing spine's title/author
+// type to that spine's own rendered width, then — if the label still doesn't
+// fit the spine's height — fixes it in this order: (1) bump the author onto
+// its own line so the title has the column to itself, (2) shrink the title's
+// font size a little at a time, (3) only as a last resort, wrap the title
+// itself across two lines. Runs after fonts/layout settle and again on
+// resize/orientation change. ----
+(function(){
+  const spines = document.querySelectorAll('.book-spine[data-book-trigger]:not(.book-spine--flat)');
+  if(!spines.length) return;
+
+  const MIN_TITLE_FONT = 6.5;
+
+  function fitSpine(spine){
+    const label = spine.querySelector('.book-spine-label');
+    const titleEl = spine.querySelector('.book-spine-title');
+    if(!label || !titleEl) return;
+
+    // remember the untouched title text so repeated runs (e.g. on resize) don't
+    // compound an earlier <br> insertion or font-size override
+    if(titleEl.dataset.fullTitle === undefined){
+      titleEl.dataset.fullTitle = titleEl.textContent;
+    }
+    titleEl.textContent = titleEl.dataset.fullTitle;
+    titleEl.style.fontSize = '';
+    spine.classList.remove('book-spine--wide', 'book-spine--narrow', 'book-spine--title-wrap', 'book-spine--author-line');
+
+    const width = spine.getBoundingClientRect().width;
+    if(width >= 44){
+      spine.classList.add('book-spine--wide');
+    } else if(width <= 30){
+      spine.classList.add('book-spine--narrow');
+    }
+
+    // let the font-size from the width class settle, then work through the
+    // fallbacks above until the label actually fits the spine's height
+    requestAnimationFrame(() => {
+      const available = spine.clientHeight - 10;
+      if(label.scrollHeight <= available) return;
+
+      // 1) author onto its own line - title no longer has to share the column
+      spine.classList.add('book-spine--author-line');
+      if(label.scrollHeight <= available) return;
+
+      // 2) title alone still doesn't fit on one line - shrink it gradually
+      let fontSize = parseFloat(window.getComputedStyle(titleEl).fontSize);
+      while(label.scrollHeight > available && fontSize > MIN_TITLE_FONT){
+        fontSize -= 0.5;
+        titleEl.style.fontSize = fontSize + 'px';
+      }
+      if(label.scrollHeight <= available) return;
+
+      // 3) last resort - wrap the title itself across two lines at the middle word.
+      // Skipped for spines forced onto a single line (book-spine--force-inline) -
+      // for those, shrinking is as far as this goes; wrapping would break the
+      // one-line layout that was specifically asked for.
+      if(spine.classList.contains('book-spine--force-inline')) return;
+      const words = titleEl.dataset.fullTitle.trim().split(/\s+/);
+      if(words.length > 1){
+        const mid = Math.ceil(words.length / 2);
+        titleEl.innerHTML = words.slice(0, mid).join(' ') + '<br>' + words.slice(mid).join(' ');
+        spine.classList.add('book-spine--title-wrap');
+      }
+    });
+  }
+
+  function fitAllSpines(){
+    spines.forEach(fitSpine);
+  }
+
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(fitAllSpines);
+  } else {
+    fitAllSpines();
+  }
+  window.addEventListener('resize', fitAllSpines);
 })();
 
 // ---- page loader: shown immediately in markup so there's never a blank flash,
