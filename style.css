@@ -273,6 +273,13 @@ svg#scene{width:100%; height:auto; display:block;}
   animation:blobWiggle 5s ease-in-out infinite;
 }
 .pill--static:hover{border-color:transparent;}
+/* not clickable, but still gets a little life on hover: colors flip (dark blob →
+   white/black text) as pure visual feedback. box-shadow (not border) for the
+   edge so there's zero layout shift when it appears - border:none stays true. */
+.pill--static:hover{
+  background:var(--paper); color:var(--charcoal);
+  box-shadow:0 0 0 1px var(--charcoal);
+}
 .pill--blob-a{background:var(--charcoal); color:var(--paper);}
 .pill--blob-b{background:var(--charcoal); color:var(--paper);}
 
@@ -433,10 +440,9 @@ svg#scene{width:100%; height:auto; display:block;}
 }
 .index-list{display:flex; flex-direction:column; gap:8px; margin-top:0;}
 @media (max-width:640px){
-  .intro-split{flex-direction:column;}
+  .intro-split{flex-direction:column; align-items:stretch;}
   .intro-photo-wrap{width:100% !important; height:auto !important; aspect-ratio:4/5.6;}
-  .intro-tabs-col{padding:36px 20px 44px;}
-  .index-block{width:100%; max-width:none; padding:20px 20px; transform:rotate(0deg);}
+  .intro-tabs-col{padding:36px 12px 44px;}
   .index-list a:nth-child(even){transform:rotate(0deg);}
   .index-block:hover{transform:translateY(-4px);}
   .index-title{font-size:20px;}
@@ -458,6 +464,15 @@ svg#scene{width:100%; height:auto; display:block;}
 @media (prefers-reduced-motion: reduce){
   .index-block{transition:none; transform:none;}
   .index-block:hover{transform:none;}
+}
+/* mobile: the base rule above caps every tab at max-width:480px, which is meant
+   for the rotated desktop/tablet card look - on a phone that number can still
+   exceed the actual usable width in some cases, and more importantly this rule
+   coming AFTER the base rule (same specificity: single class selector either
+   way) is what lets it actually win the cascade and stretch the tabs full width,
+   rather than being silently overridden by the max-width:480px above it. */
+@media (max-width:640px){
+  .index-block{width:100%; max-width:none; padding:20px 20px; transform:rotate(0deg);}
 }
 
 /* big hand cursor: replaces the paper-plane cursor whenever something is clickable */
@@ -749,7 +764,7 @@ button,
   display:grid; grid-template-columns:1fr minmax(260px, min(38%, 480px)); align-items:start;
 }
 .talkbooks-left-col{padding:0 clamp(20px,4vw,40px) 24px clamp(24px,5vw,64px);}
-.talkbooks-photo-wrap{aspect-ratio:4/5; overflow:hidden; border-radius:16px 0 0 16px;}
+.talkbooks-photo-wrap{aspect-ratio:4/5; overflow:hidden; border-radius:16px 0 0 16px; position:relative;}
 .talkbooks-photo{width:100%; height:100%; object-fit:cover; object-position:center 30%; display:block;}
 @media (max-width:900px){
   .talkbooks-row{grid-template-columns:minmax(0,1fr);}
@@ -1054,31 +1069,18 @@ button,
    the text than above - this compensates so it looks visually centered. ---- */
 .work-gallery-hint, .recognition-hint{
   z-index:3; display:inline-flex; align-items:center; justify-content:center;
-  padding:5px 7px 2px; pointer-events:auto; cursor:pointer; text-align:center;
-  overflow:hidden; isolation:isolate;
-  border:1.5px dashed rgba(255,253,249,0.8);
-  border-radius:20px; box-shadow:0 2px 10px rgba(43,43,43,0.22);
-  font-family:'Special Elite','Inter',monospace; font-size:9.5px;
-  letter-spacing:0.04em; text-transform:uppercase; color:var(--paper);
-  line-height:1; white-space:nowrap;
+  padding:8px; pointer-events:auto; cursor:pointer;
+  color:var(--paper);
   opacity:0; transition:opacity 0.2s ease, transform 0.2s ease;
 }
-/* real frosted-glass layer, same mechanism as the Reflections cards: a blurred copy
-   of the card's own photo sits behind the label (genuine filter:blur() on an <img>,
-   not backdrop-filter reaching through - kept consistent with the reflections cards,
-   and it also sidesteps backdrop-filter's flaky behaviour over masked/scrolling
-   ancestors like .work-gallery-wrap's edge fade), with a translucent tint on top for
-   the glass wash, then the label on top of that. */
-.hint-glass-bg{
-  position:absolute; top:-25%; left:-25%; width:150%; height:150%;
-  object-fit:cover; z-index:0;
-  filter:blur(10px) saturate(1.2) brightness(0.95);
-}
-.hint-glass-tint{
-  position:absolute; inset:0; z-index:1;
-  background:rgba(43,43,43,0.22);
-}
 .hint-glass-label{ position:relative; z-index:2; }
+.hint-glass-icon{ position:relative; z-index:2; display:flex; }
+.hint-glass-icon svg{
+  width:22px; height:auto; display:block;
+  /* no background shape behind the icon anymore, so this drop-shadow is what
+     keeps it legible against light or busy photos instead */
+  filter:drop-shadow(0 1px 4px rgba(0,0,0,0.65));
+}
 /* Work gallery: anchored bottom-right of the rectangular image, same as before */
 .work-gallery-hint{
   position:absolute; bottom:8px; right:8px;
@@ -1612,7 +1614,7 @@ a.work-detail-logo:hover{transform:scale(1.08); opacity:0.85;}
   /* M11's own dimensions (4961 x 7016), so the box IS the poster's shape - object-fit
      has nothing to crop or pad, the full image just fills its frame exactly. */
   aspect-ratio:4961 / 7016;
-  overflow:hidden; border-radius:16px 0 0 16px;
+  overflow:hidden; border-radius:16px 0 0 16px; position:relative;
 }
 .map-feature-tile{display:block; width:100%; height:100%;}
 .map-feature-photo{
@@ -2119,4 +2121,77 @@ footer.site-footer{
 }
 @media (prefers-reduced-motion: reduce){
   .loader-wing-left, .loader-wing-right{animation:none;}
+}
+
+/* ---- solid circle "follower" cursor: a real DOM dot (not a static per-element
+   icon) that tracks the mouse and swaps color per section - see the matching JS
+   block near the end of script.js for the positioning/color-swap logic. This just
+   styles the dot itself; fully opaque, no transparency. Native cursor is hidden
+   (per-element, via inline style set in JS) only while over one of those sections,
+   so the plane/hand cursor system elsewhere on the page is untouched. ---- */
+.custom-cursor-dot{
+  position:fixed; top:0; left:0; width:0; height:0;
+  pointer-events:none; z-index:9999; will-change:transform;
+  /* position only - updated on every mousemove, no transition so it tracks the
+     real cursor 1:1 with zero lag. the pop-in/out animation lives on the inner
+     dot below instead, so it doesn't fight with this. */
+  transform:translate(var(--x,-999px), var(--y,-999px));
+}
+.custom-cursor-dot .dot-inner{
+  position:absolute; top:0; left:0; width:14px; height:14px; border-radius:50%;
+  transform:translate(-50%,-50%) scale(0);
+  /* hiding (scale back to 0) is instant, on purpose - no transform transition
+     here. If it animated out over time, there'd be a window where the native
+     cursor has already come back (that happens the instant you're no longer
+     over a tracked element) while the dot is still visibly shrinking, so both
+     appear to show at once - e.g. moving from a gallery card onto its "close"
+     button. Only the color/border still transition smoothly either direction. */
+  transition:background-color 0.15s ease, border-color 0.15s ease;
+  background-color:rgba(26,26,26,0.55);
+}
+.custom-cursor-dot.is-visible .dot-inner{
+  transform:translate(-50%,-50%) scale(1);
+  transition:transform 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+/* hollow ring variant for elements that aren't actually clickable (e.g. the
+   decorative "Endeavours"/"Musings" pills) - same color and size as the solid
+   dot so it still feels like part of the same system, but visually reads as
+   "look, don't click" instead of implying interactivity */
+.custom-cursor-dot .dot-inner.is-outline{
+  background-color:transparent;
+  border:1.5px solid rgba(26,26,26,0.55);
+}
+
+/* ---- magnifying loupe for the three big standalone feature photos (headshot,
+   the Copenhagen break photo, the Creative Studio quote photo) - a circular lens
+   follows the mouse and shows an actually-zoomed crop of the real photo inside
+   it, via a background-image trick rather than a separate scaled <img>. Applied
+   only to elements carrying data-magnify (set in script.js), skipped entirely on
+   touch devices since there's no hover there to drive it. ---- */
+[data-magnify]{cursor:none;}
+.magnify-lens{
+  position:absolute; width:78px; height:78px;
+  pointer-events:none; z-index:5; overflow:hidden;
+  box-shadow:0 3px 16px rgba(43,43,43,0.45);
+  opacity:0; transition:opacity 0.15s ease;
+  background-repeat:no-repeat;
+  animation:lensBlob 4.5s ease-in-out infinite;
+}
+/* organic, jelly/water-like wobble instead of a plain circle - same technique as
+   the "Endeavours"/"Musings" pill blobs elsewhere on the site (percentage
+   border-radius drifting between a few organic states), just applied to a lens
+   shape instead of a rounded rectangle. */
+@keyframes lensBlob{
+  0%, 100%{border-radius:36% 64% 72% 28% / 40% 38% 62% 60%;}
+  25%{border-radius:66% 34% 26% 74% / 60% 32% 68% 40%;}
+  50%{border-radius:46% 54% 34% 66% / 68% 40% 60% 32%;}
+  75%{border-radius:72% 28% 60% 40% / 32% 68% 30% 70%;}
+}
+@media (prefers-reduced-motion: reduce){
+  .magnify-lens{animation:none; border-radius:50%;}
+}
+.magnify-lens.is-visible{opacity:1;}
+@media (hover:none), (pointer:coarse){
+  [data-magnify]{cursor:auto;}
+  .magnify-lens{display:none;}
 }

@@ -403,18 +403,27 @@ const galleryCards = document.querySelectorAll('.work-gallery-card[data-project-
 // place and automatically covers any new cards added later. Visibility is pure CSS
 // (:hover), touch devices simply never trigger :hover so it stays hidden there and
 // they rely on the tap-to-open behavior they already have.
+// Shared "view" eye icon for both hint tags below - thick lens-shaped outline with
+// a solid pupil and a small highlight dot, mirroring the reference icon. Uses
+// currentColor for the outline/pupil so it inherits var(--paper) from the hint's
+// own CSS, and the highlight dot is punched out in the tint layer's dark tone so
+// it reads as a contrast dot against the light pupil rather than a plain circle.
+const EYE_ICON_SVG = `
+  <svg viewBox="0 0 24 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M1 8C1 8 5.2 1.2 12 1.2C18.8 1.2 23 8 23 8C23 8 18.8 14.8 12 14.8C5.2 14.8 1 8 1 8Z"
+      stroke="currentColor" stroke-width="2.1" stroke-linejoin="round"/>
+    <circle cx="12" cy="8" r="4" fill="currentColor"/>
+    <circle cx="10.4" cy="6.5" r="1.15" fill="rgba(43,43,43,0.85)"/>
+  </svg>
+`;
+
 galleryCards.forEach(card => {
   const imgWrap = card.querySelector('.work-gallery-img');
   if(!imgWrap) return;
-  const base = card.dataset.imgBase;
-  const ext = card.dataset.imgExt || 'jpg';
   const hint = document.createElement('span');
   hint.className = 'work-gallery-hint';
-  hint.innerHTML = `
-    ${base ? `<img class="hint-glass-bg" src="images/${base}.${ext}" alt="" aria-hidden="true">` : ''}
-    <span class="hint-glass-tint" aria-hidden="true"></span>
-    <span class="hint-glass-label">View Project</span>
-  `;
+  hint.setAttribute('aria-label', 'View project');
+  hint.innerHTML = `<span class="hint-glass-icon">${EYE_ICON_SVG}</span>`;
   imgWrap.appendChild(hint);
 });
 if(galleryCards.length){
@@ -760,14 +769,10 @@ if(recognitionCards.length){
   // width/height as the frame when closed, so anchoring to the card's own corner lands
   // in the same visual spot without the clipping problem.
   recognitionCards.forEach(card => {
-    const base = card.dataset.imgBase;
     const hint = document.createElement('span');
     hint.className = 'recognition-hint';
-    hint.innerHTML = `
-      ${base ? `<img class="hint-glass-bg" src="images/Recognition/${base}.jpg" alt="" aria-hidden="true">` : ''}
-      <span class="hint-glass-tint" aria-hidden="true"></span>
-      <span class="hint-glass-label">View Honour</span>
-    `;
+    hint.setAttribute('aria-label', 'View honour');
+    hint.innerHTML = `<span class="hint-glass-icon">${EYE_ICON_SVG}</span>`;
     card.appendChild(hint);
   });
 
@@ -1627,4 +1632,177 @@ if(document.fonts && document.fonts.ready){
   } else {
     window.addEventListener('load', hideLoader);
   }
+})();
+
+// ---- solid "follower" circle cursor for a specific set of interactive sections
+// (Work gallery cards, Recognition circles, Map tiles, Filmstrip frames, Book
+// spines, Reflection cards, and the lightbox close/nav buttons). This is a real DOM
+// dot, not a static per-element cursor image like the plane/hand system above -
+// it's positioned via CSS custom properties on every mousemove and swaps to that
+// section's own palette color on mouseenter. The plane/hand cursor system is left
+// completely alone: this only hides the *native* cursor on the specific element
+// being hovered (via that element's own inline style, not document.body), for the
+// exact duration the dot is standing in for it, so nothing else on the page is
+// affected. Skipped entirely on touch devices, which never show a cursor anyway. ----
+(function(){
+  if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const dot = document.createElement('div');
+  dot.className = 'custom-cursor-dot';
+  const dotInner = document.createElement('div');
+  dotInner.className = 'dot-inner';
+  dot.appendChild(dotInner);
+  document.body.appendChild(dot);
+
+  // one entry per section: its selector and the palette color its dot should use.
+  // same color everywhere right now, kept as a lookup per selector (rather than
+  // one shared constant) in case you want per-section colors back later.
+  const cursorGroups = [
+    // most-specific/nested selectors go first: matching is done via closest()
+    // walking up from the actual hovered element, and stops at the first group
+    // that matches, so a close button living *inside* a gallery card must be
+    // checked before that card's own (broader) selector, or the card's rule
+    // would always win first and the button would never be reached.
+    // every "×" close button on the site, consolidated into one group so they're
+    // all guaranteed to behave identically - .work-gallery-detail-close covers
+    // both the Work and Recognition detail panels (the Recognition one carries
+    // that class alongside its own), .popup-close is the header/nav popup,
+    // .book-open-close is the bookshelf panel, and the two lightboxes.
+    { selector: '.popup-close, .work-gallery-detail-close, .book-open-close, .map-lightbox-close, .art-lightbox-close', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.work-gallery-hint, .recognition-hint', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.work-gallery-card', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.recognition-card', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.map-tile', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.filmstrip-frame', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.book-spine[data-book-trigger]', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.reflection-card[data-reflection-flip]', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.map-lightbox-nav, .art-lightbox-nav', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.dialogues-blob', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.popup-close, .work-gallery-detail-close, .book-open-close, .map-lightbox-close, .art-lightbox-close', color: 'rgba(26,26,26,0.55)' },
+    { selector: '.pill--static', color: 'rgba(26,26,26,0.55)', outline: true }
+  ];
+
+  // Driven by live mouse position + event.target rather than mouseenter/mouseleave
+  // bound once to each element at page load. That earlier approach broke around the
+  // Work section's expand/collapse: opening or closing a project card triggers a big
+  // reflow (the detail panel gets injected/hidden, the card resizes), which could
+  // leave a stale element's cursor stuck at "none" or fire enter/leave out of order,
+  // showing the dot and the native hand cursor at once. Re-checking the real element
+  // under the pointer on every move sidesteps that entirely - there's no listener to
+  // go stale, so it self-corrects the instant the mouse moves again after any DOM
+  // change, however the layout shifted.
+  let lastX = 0, lastY = 0, lastTarget = null, rafPending = false, currentMatchEl = null;
+
+  function clearCurrentMatch(){
+    if(currentMatchEl){ currentMatchEl.style.cursor = ''; currentMatchEl = null; }
+    dot.classList.remove('is-visible');
+  }
+
+  function syncHoverState(target){
+    // real <a> links (the "Read more" links, and any inline link inside a
+    // project description) sit *inside* cards like .work-gallery-card that are
+    // tracked further down this list. Since matching climbs up the DOM tree
+    // looking for the nearest tracked ancestor, without this check it would
+    // find the card before recognizing the link itself is a distinct clickable
+    // thing that should stay pure hand-cursor, no circle. None of the tracked
+    // groups below are themselves <a> tags, so it's always safe to bail out
+    // early whenever the hovered element is - or sits inside - a real link.
+    if(target && target.closest && target.closest('a')){
+      clearCurrentMatch();
+      return;
+    }
+    let matchEl = null, matchGroup = null;
+    if(target && target.closest){
+      for(const group of cursorGroups){
+        const found = target.closest(group.selector);
+        if(found){ matchEl = found; matchGroup = group; break; }
+      }
+    }
+    if(matchEl){
+      if(currentMatchEl !== matchEl){
+        if(currentMatchEl) currentMatchEl.style.cursor = '';
+        currentMatchEl = matchEl;
+        currentMatchEl.style.cursor = 'none';
+      }
+      dotInner.style.backgroundColor = matchGroup.outline ? 'transparent' : matchGroup.color;
+      dotInner.classList.toggle('is-outline', !!matchGroup.outline);
+      dot.classList.add('is-visible');
+    } else {
+      clearCurrentMatch();
+    }
+  }
+
+  document.addEventListener('mousemove', (e) => {
+    lastX = e.clientX; lastY = e.clientY; lastTarget = e.target;
+    if(rafPending) return;
+    rafPending = true;
+    requestAnimationFrame(() => {
+      dot.style.setProperty('--x', lastX + 'px');
+      dot.style.setProperty('--y', lastY + 'px');
+      syncHoverState(lastTarget);
+      rafPending = false;
+    });
+  });
+
+  // if the mouse leaves the window entirely, don't leave the dot (or a stray
+  // cursor:none) stuck on whatever it was last over
+  document.addEventListener('mouseleave', clearCurrentMatch);
+})();
+
+// ---- magnifying loupe for the three big standalone photos: headshot, the
+// Copenhagen break photo, and the Creative Studio quote photo. A real DOM
+// circle follows the mouse and shows an actually-magnified crop of the same
+// photo inside it (via a scaled CSS background-image, not a duplicated <img>
+// element), so it reflects the real photo pixel-for-pixel rather than an
+// approximation. Skipped entirely on touch devices - there's no hover there to
+// drive a "follow the cursor" effect, so the images just behave normally. ----
+(function(){
+  if(!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const targets = [
+    { container: '.intro-photo-wrap', img: '.intro-photo' },
+    { container: '.work-break-photo', img: 'img' },
+    { container: '.studio-quote-photo', img: 'img' },
+    { container: '.map-feature-photo-wrap', img: '.map-feature-photo' },
+    { container: '.talkbooks-photo-wrap', img: '.talkbooks-photo' }
+  ];
+  const SCALE = 2.4;
+  const LENS_SIZE = 78;
+
+  targets.forEach(({container, img}) => {
+    const wrap = document.querySelector(container);
+    if(!wrap) return;
+    const photo = wrap.querySelector(img);
+    if(!photo) return;
+
+    wrap.setAttribute('data-magnify', '');
+    const lens = document.createElement('div');
+    lens.className = 'magnify-lens';
+    lens.style.backgroundImage = `url("${photo.currentSrc || photo.src}")`;
+    wrap.appendChild(lens);
+
+    // in case the photo is still loading when this runs (lazy-loaded images),
+    // pick up its real src once it's actually available rather than baking in
+    // an empty background-image
+    if(!photo.currentSrc && !photo.complete){
+      photo.addEventListener('load', () => {
+        lens.style.backgroundImage = `url("${photo.currentSrc || photo.src}")`;
+      }, {once:true});
+    }
+
+    wrap.addEventListener('mousemove', (e) => {
+      const rect = wrap.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      lens.classList.add('is-visible');
+      lens.style.left = (x - LENS_SIZE / 2) + 'px';
+      lens.style.top = (y - LENS_SIZE / 2) + 'px';
+      lens.style.backgroundSize = (rect.width * SCALE) + 'px ' + (rect.height * SCALE) + 'px';
+      lens.style.backgroundPosition =
+        (-(x * SCALE - LENS_SIZE / 2)) + 'px ' + (-(y * SCALE - LENS_SIZE / 2)) + 'px';
+    });
+    wrap.addEventListener('mouseleave', () => {
+      lens.classList.remove('is-visible');
+    });
+  });
 })();
