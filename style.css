@@ -1460,7 +1460,7 @@ a.work-detail-logo:hover{transform:scale(1.08); opacity:0.85;}
 /* Meet-box: rounded card sitting to the LEFT of the collage. Three photo "blobs"
    (soft-cornered, tilted, overlapping) are centered on the card's left border, text
    sits on the right inside the card. Not a grid, not a stack of uniform boxes. */
-.dialogues-content-row{display:flex; align-items:center; gap:4px; margin-top:28px;}
+.dialogues-content-row{display:flex; align-items:center; gap:4px; margin-top:28px; min-width:0;}
 .dialogues-meetbox{
   position:relative; flex:0 0 360px; width:360px; height:480px;
   border-radius:24px;
@@ -1538,7 +1538,7 @@ a.work-detail-logo:hover{transform:scale(1.08); opacity:0.85;}
    photos beside it - no manual width-matching needed. */
 .dialogues-collage{
   display:grid; grid-template-columns:repeat(4, 1fr); gap:14px;
-  max-width:592px; margin:28px 0 0 auto;
+  max-width:592px; min-width:0; margin:28px 0 0 auto;
 }
 .dialogues-hero{
   display:block; grid-column:span 2;

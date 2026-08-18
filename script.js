@@ -685,6 +685,7 @@ function buildLocationMarkup(locationString){
         if(card.classList.contains('is-expanded')) closeCard(card);
         else openCard(card);
       }
+      if(e.key === 'Escape' && card.classList.contains('is-expanded')) closeCard(card);
     });
   });
 
