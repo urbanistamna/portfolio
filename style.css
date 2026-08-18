@@ -2172,20 +2172,27 @@ footer.site-footer{
 .magnify-lens{
   position:absolute; width:78px; height:78px;
   pointer-events:none; z-index:5; overflow:hidden;
-  box-shadow:0 3px 16px rgba(43,43,43,0.45);
+  filter:drop-shadow(0 3px 10px rgba(43,43,43,0.5));
   opacity:0; transition:opacity 0.15s ease;
   background-repeat:no-repeat;
-  animation:lensBlob 4.5s ease-in-out infinite;
+  /* microbe-like continuous ripple. Note: an SVG clip-path with an animated
+     path (true point-by-point morphing) was tried first and looked better, but
+     hit a genuine Chromium rendering bug where clip-path:url() referencing an
+     objectBoundingBox SVG path corrupts specifically when the clipped content
+     is a raster image (confirmed via isolated testing - identical setup with a
+     CSS gradient instead of a real photo renders perfectly). border-radius
+     doesn't have that failure mode, so that's what's actually running. */
+  animation:lensBlob 5s ease-in-out infinite;
 }
-/* organic, jelly/water-like wobble instead of a plain circle - same technique as
-   the "Endeavours"/"Musings" pill blobs elsewhere on the site (percentage
-   border-radius drifting between a few organic states), just applied to a lens
-   shape instead of a rounded rectangle. */
 @keyframes lensBlob{
-  0%, 100%{border-radius:36% 64% 72% 28% / 40% 38% 62% 60%;}
-  25%{border-radius:66% 34% 26% 74% / 60% 32% 68% 40%;}
-  50%{border-radius:46% 54% 34% 66% / 68% 40% 60% 32%;}
-  75%{border-radius:72% 28% 60% 40% / 32% 68% 30% 70%;}
+  0%{border-radius:38% 62% 71% 29% / 42% 36% 64% 58%;}
+  14%{border-radius:58% 42% 33% 67% / 60% 44% 56% 40%;}
+  28%{border-radius:70% 30% 46% 54% / 34% 62% 38% 66%;}
+  42%{border-radius:42% 58% 62% 38% / 68% 32% 68% 32%;}
+  57%{border-radius:64% 36% 40% 60% / 40% 66% 34% 60%;}
+  71%{border-radius:33% 67% 58% 42% / 62% 38% 62% 38%;}
+  85%{border-radius:60% 40% 36% 64% / 36% 58% 42% 64%;}
+  100%{border-radius:38% 62% 71% 29% / 42% 36% 64% 58%;}
 }
 @media (prefers-reduced-motion: reduce){
   .magnify-lens{animation:none; border-radius:50%;}
